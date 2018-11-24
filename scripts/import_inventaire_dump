@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-blazegraph_host=http://localhost:9999
-
 post_ttl_file(){
-  namespace=$1
-  file_path=$2
-  curl "${blazegraph_host}/bigdata/namespace/${namespace}/sparql" -H 'Content-Type: application/x-turtle' -d@"./${2}" &&
+  file_path=$1
+  # Using the default namespace - kb - as no way to create one from the API could be found
+  curl "http://localhost:9999/bigdata/namespace/kb/sparql" -H 'Content-Type: application/x-turtle' -d@"${file_path}" &&
   echo "namespace: ${namespace} - file: ${file_path}"
 }
 
@@ -13,5 +11,4 @@ post_ttl_file(){
   curl https://dumps.inventaire.io/inv/latest/entities_with_seeds.ttl.gz | gzip -d > entities_with_seeds.ttl
 }
 
-# Using the default namespace - kb - as no way to create one from the API could be found
-post_ttl_file kb entities_with_seeds.ttl
+post_ttl_file ./entities_with_seeds.ttl
