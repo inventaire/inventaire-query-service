@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+./scripts/install_query_service_gui
+export INVENTAIRE_QUERY_GUI_PATH=$(pwd)/inventaire-query-gui
+./scripts/install_nginx
+./scripts/start_blazegraph
+./scripts/import_inventaire_dump

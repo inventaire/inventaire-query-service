@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+mkdir -p ./data/blazegraph
+touch ./data/blazegraph/bigdata.jnl
+# See https://github.com/lyrasis/docker-blazegraph/issues/12
+sudo chown 100:100 ./data/blazegraph/bigdata.jnl
+
+docker-compose -f  ./docker-compose.yml up --build -d

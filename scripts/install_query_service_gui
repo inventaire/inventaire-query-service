@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+[ -e ./inventaire-query-gui ] || {
+  git clone https://github.com/inventaire/inventaire-query-gui
+  cd inventaire-query-gui
+  npm install
+  # Known crash: process out-of-memory
+  npm run build
+  cd ..
+}

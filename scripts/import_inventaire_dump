@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+blazegraph_host=http://localhost:9999
+
+# STATUS
+# - fails to create the namepace: "409: kb already exists" error
+# - work-around: do it manually from ${blazegraph_host}/bigdata
+create_namespace(){
+  namespace=$1
+  config="./scripts/assets/${namespace}.namespace.config"
+  curl -XPOST "${blazegraph_host}/bigdata/namespace" -H 'Content-Type: text/plain' -d "@${config}"
+}
+
+post_ttl_file(){
+  namespace=$1
+  file_path=$2
+  curl "${blazegraph_host}/bigdata/namespace/${namespace}/sparql" -H 'Content-Type: application/x-turtle' -d@"./${2}" &&
+  echo "namespace: ${namespace} - file: ${file_path}"
+}
+
+# create_namespace inventaire
+
+[ -e entities_with_seeds.ttl ] || {
+  curl https://dumps.inventaire.io/inv/latest/entities_with_seeds.ttl.gz | gzip -d > entities_with_seeds.ttl
+}
+
+post_ttl_file inventaire entities_with_seeds.ttl
+

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+cat ./templates/query_service.nginx.template |
+  sed "s@INVENTAIRE_QUERY_GUI_PATH@${INVENTAIRE_QUERY_GUI_PATH}@" |
+  sudo tee /etc/nginx/sites-enabled/query_service
+sudo nginx -s reload
