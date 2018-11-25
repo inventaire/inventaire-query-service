@@ -1,3 +1,5 @@
+server_tokens off;
+
 # Inspired by: https://github.com/wmde/wikibase-docker/blob/master/wdqs-proxy/latest/wdqs.template
 
 server {
@@ -15,9 +17,7 @@ server {
   add_header X-Content-Type-Options "nosniff" always;
 
   location /sparql {
-      # use IP address for the backend and not "localhost" to ensure
-      # connection is done over IPv4 (backend is configured as IPv4 only)
-      proxy_pass http://127.0.0.1/bigdata/namespace/kb;
+      proxy_pass http://localhost:9999/bigdata/namespace/kb/sparql;
 
       proxy_set_header X-BIGDATA-MAX-QUERY-MILLIS 60000;
       proxy_set_header X-BIGDATA-READ-ONLY "yes";
