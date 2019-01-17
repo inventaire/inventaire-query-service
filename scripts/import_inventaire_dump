@@ -1,9 +1,31 @@
 #!/usr/bin/env bash
 
+exists_or_create_namespace(){
+  namespace=$1
+  # Should includes additional prefixes, but actually FAILS to do so
+  # see https://jira.blazegraph.com/browse/BLZG-1773
+  curl -XPOST 'http://localhost:9999/bigdata/namespace' -H 'Content-Type: text/plain' -d "com.bigdata.namespace.${namespace}.lex.com.bigdata.btree.BTree.branchingFactor=400
+com.bigdata.rdf.store.AbstractTripleStore.textIndex=false
+com.bigdata.rdf.store.AbstractTripleStore.axiomsClass=com.bigdata.rdf.axioms.NoAxioms
+com.bigdata.rdf.sail.isolatableIndices=false
+com.bigdata.rdf.sail.truthMaintenance=false
+com.bigdata.rdf.store.AbstractTripleStore.justify=false
+com.bigdata.rdf.sail.namespace=${namespace}
+com.bigdata.rdf.store.AbstractTripleStore.quads=false
+com.bigdata.journal.Journal.groupCommit=false
+org.openrdf.repository.debug=true
+com.bigdata.namespace.${namespace}.spo.com.bigdata.btree.BTree.branchingFactor=1024
+com.bigdata.rdf.store.AbstractTripleStore.geoSpatial=false
+com.bigdata.rdf.store.AbstractTripleStore.statementIdentifiers=false
+com.bigdata.rdf.sail.sparql.PrefixDeclProcessor.additionalDeclsFile=/assets/prefixes.conf
+"
+}
+
 post_ttl_file(){
-  file_path=$1
-  # Using the default namespace - kb - as no way to create one from the API could be found
-  curl "http://localhost:9999/bigdata/namespace/kb/sparql" -H 'Content-Type: application/x-turtle' -d@"${file_path}" &&
+  namespace=$1
+  file_path=$2
+  exists_or_create_namespace $namespace
+  curl "http://localhost:9999/bigdata/namespace/${namespace}/dataloader" -H 'Content-Type: application/x-turtle' -d@"${file_path}" &&
   echo "namespace: ${namespace} - file: ${file_path}"
 }
 
@@ -11,4 +33,4 @@ post_ttl_file(){
   curl https://dumps.inventaire.io/inv/latest/entities_with_seeds.ttl.gz | gzip -d > entities_with_seeds.ttl
 }
 
-post_ttl_file ./entities_with_seeds.ttl
+post_ttl_file "entities" ./entities_with_seeds.ttl

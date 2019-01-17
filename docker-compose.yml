@@ -6,3 +6,4 @@ services:
       - "9999:8080"
     volumes:
       - './data/blazegraph/bigdata.jnl:/var/lib/jetty/bigdata.jnl'
+      - './scripts/assets:/assets'
