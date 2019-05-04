@@ -19,7 +19,7 @@ server {
   location /sparql {
       proxy_pass http://localhost:9999/bigdata/namespace/entities/sparql;
 
-      proxy_set_header X-BIGDATA-MAX-QUERY-MILLIS 60000;
+      proxy_set_header X-BIGDATA-MAX-QUERY-MILLIS 120000;
       proxy_set_header X-BIGDATA-READ-ONLY "yes";
 
       add_header Access-Control-Allow-Origin * always;
