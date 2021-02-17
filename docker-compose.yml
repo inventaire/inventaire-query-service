@@ -2,6 +2,7 @@ version: '3'
 services:
   blazegraph:
     image: lyrasis/blazegraph:2.1.5
+    restart: unless-stopped
     ports:
       # Expose 9999 for localhost only
       - "127.0.0.1:9999:8080"
