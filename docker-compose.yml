@@ -1,7 +1,11 @@
 version: '3'
 services:
   blazegraph:
-    image: lyrasis/blazegraph:2.1.5
+    # Build our own image to get up-to-date packages, especially SSL
+    # as outdated packages result in "ExecutionException: javax.net.ssl.SSLException: Received fatal alert: handshake_failure" with query.wikidata.org
+    build:
+      context: ./blazegraph/2.1.5
+      dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       # Expose 9999 for localhost only
