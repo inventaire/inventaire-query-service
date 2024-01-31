@@ -25,12 +25,8 @@ post_ttl_file(){
   namespace=$1
   file_path=$2
   exists_or_create_namespace $namespace
-  curl "http://localhost:9999/bigdata/namespace/${namespace}/dataloader" -H 'Content-Type: application/x-turtle' -d@"${file_path}" &&
+  curl "http://localhost:9999/bigdata/namespace/${namespace}/dataloader" -H 'Content-Type: application/x-turtle' -XPOST --upload-file "${file_path}" &&
   echo "namespace: ${namespace} - file: ${file_path}"
-}
-
-[ -e entities_with_seeds.ttl ] || {
-  curl https://dumps.inventaire.io/inv/latest/entities_with_seeds.ttl.gz | gzip -d > entities_with_seeds.ttl
 }
 
 post_ttl_file "entities" ./entities_with_seeds.ttl
