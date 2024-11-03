@@ -11,5 +11,7 @@ services:
       # Expose 9999 for localhost only
       - "127.0.0.1:9999:8080"
     volumes:
-      - './data/blazegraph/bigdata.jnl:/var/lib/jetty/bigdata.jnl'
       - './scripts/assets:/assets'
+      # This was triggering the creation of bigdata.jnl as a directory,
+      # so better let Docker handle that volume, we can always rebuild the data from entities dumps
+      # - './data/blazegraph/bigdata.jnl:/var/lib/jetty/bigdata.jnl'
